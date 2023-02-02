@@ -6,10 +6,10 @@ import axios from 'axios';
 export const GlobalService = {
 
     initializeAxios() {
-        axios.defaults.baseURL = SERVER_API_URL; //api
+        axios.defaults.baseURL = SERVER_API_URL;
         axios.interceptors.request.use(
             (config) => {
-                let token = localStorage.getItem(TOKEN_NAME); //
+                let token = localStorage.getItem(TOKEN_NAME);
                 if (token) {
                     config.headers['Authorization'] = `Bearer ${token}`;
                 }

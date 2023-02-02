@@ -8,29 +8,35 @@
                             <div class="card-header">Login</div>
 
                             <div class="card-body">
-                                <div class="row mb-3">
-                                    <label for="email" class="col-md-4 col-form-label text-md-end">Email Address</label>
+                                <form @submit.prevent="AuthLogin" method="post">
+                                    <div class="row mb-3">
+                                        <label for="email" class="col-md-4 col-form-label text-md-end">Email
+                                            Address</label>
 
-                                    <div class="col-md-6">
-                                        <input id="email" type="email" class="form-control " v-model="email" required="" autocomplete="email" autofocus="">
+                                        <div class="col-md-6">
+                                            <input id="email" type="email" class="form-control " v-model="email"
+                                                   required="" autocomplete="email" autofocus="">
 
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mb-3">
-                                    <label for="password" class="col-md-4 col-form-label text-md-end">Password</label>
+                                    <div class="row mb-3">
+                                        <label for="password"
+                                               class="col-md-4 col-form-label text-md-end">Password</label>
 
-                                    <div class="col-md-6">
-                                        <input id="password" type="password" class="form-control " v-model="password" required="" autocomplete="current-password">
+                                        <div class="col-md-6">
+                                            <input id="password" type="password" class="form-control "
+                                                   v-model="password" required="" autocomplete="current-password">
 
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mb-0">
-                                    <div class="col-md-12">
-                                        <button @click="AuthLogin" class="btn btn-primary">Login</button>
+                                    <div class="row mb-0">
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary">Login</button>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -54,27 +60,52 @@ export default {
         }
     },
     methods: {
-        // AuthLogin() {
-        //     this.$router.push({name:'home'});
-        // }
-        async AuthLogin() {
-            // alert('Authenticating')
-            const auth = await axios.post('/login',{
-                email:this.email,
-                password:this.password
-            }).then(response=>{
-                localStorage.setItem(TOKEN_NAME,response?.data?.token)
-                localStorage.setItem(USER,JSON.stringify(response?.data?.user))
-                return response.data ?? false
-            }).catch(error=>{
-                return false
-            })
+        // async AuthLogin() {
+        //     const auth = await axios.post('/login', {
+        //         email: this.email,
+        //         password: this.password
+        //     }).then(response => {
+        //         localStorage.setItem(TOKEN_NAME, response?.data?.token)
+        //         localStorage.setItem(USER, JSON.stringify(response?.data?.user))
+        //         return response.data ?? false
+        //     }).catch(error => {
+        //         return false
+        //     });
+        //
+        //     if (auth) {
+        //         this.$router.push({name: 'home'});
+        //     }
+        //
+        // },
 
-            if(auth){
-                this.$router.push({name:'home'})
+        AuthLogin() {
+            axios.post('/user', {
+                firstName: 'Fred',
+                lastName: 'Flintstone'
+            })
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            axios.post('/login', {
+                email: this.email,
+                password: this.password
+            }).then(response => {
+                localStorage.setItem(TOKEN_NAME, response?.data?.token)
+                localStorage.setItem(USER, JSON.stringify(response?.data?.user))
+                return response.data ?? false
+            }).catch(error => {
+                return false
+            });
+
+            if (auth) {
+                this.$router.push({name: 'home'});
             }
 
-        }
+        },
     },
     computed: {}
 }
