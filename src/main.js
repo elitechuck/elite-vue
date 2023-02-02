@@ -3,6 +3,13 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { GlobalService } from "@/services/GlobalService";
+import axios from "axios";
+
+GlobalService.initializeAxios();
+
 Vue.config.productionTip = false;
 
 new Vue({

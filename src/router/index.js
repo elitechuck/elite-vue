@@ -1,6 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import {TOKEN_NAME} from "@/services/ServerConstants";
+// import HomeView from "../views/HomeView.vue";
+
+const HomeView = () => import(/* webpackChunkName: "home" */ "../views/HomeView.vue");
+const About = () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue");
+const Login = () => import(/* webpackChunkName: "login" */ "../views/LoginView.vue");
 
 Vue.use(VueRouter);
 
@@ -9,15 +14,18 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView,
+       meta:{requiresAuth:false},
   },
   {
     path: "/about",
     name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    component: About,
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
+       meta:{requiresAuth:false},
   },
 ];
 
@@ -27,4 +35,25 @@ const router = new VueRouter({
   routes,
 });
 
+router.beforeEach(function (to, from, next) {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (localStorage.getItem(TOKEN_NAME) != null) {
+            next();
+            return;
+        }
+
+        next('/login')
+    } else {
+        if(to.matched.some(record => record.meta.requiresAuth === false)){
+            if (localStorage.getItem(TOKEN_NAME) != null){
+                next('/home')
+                return;
+            }
+        }
+
+        next();
+    }
+});
+
 export default router;
+
