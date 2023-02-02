@@ -60,37 +60,8 @@ export default {
         }
     },
     methods: {
-        // async AuthLogin() {
-        //     const auth = await axios.post('/login', {
-        //         email: this.email,
-        //         password: this.password
-        //     }).then(response => {
-        //         localStorage.setItem(TOKEN_NAME, response?.data?.token)
-        //         localStorage.setItem(USER, JSON.stringify(response?.data?.user))
-        //         return response.data ?? false
-        //     }).catch(error => {
-        //         return false
-        //     });
-        //
-        //     if (auth) {
-        //         this.$router.push({name: 'home'});
-        //     }
-        //
-        // },
-
-        AuthLogin() {
-            axios.post('/user', {
-                firstName: 'Fred',
-                lastName: 'Flintstone'
-            })
-                .then(response => {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-
-            axios.post('/login', {
+        async AuthLogin() {
+            const auth = await axios.post('/login', {
                 email: this.email,
                 password: this.password
             }).then(response => {
