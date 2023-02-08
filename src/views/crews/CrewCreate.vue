@@ -1,0 +1,119 @@
+<template>
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div v-if="crew" class="card">
+        <div class="card-header">
+          <div class="float-right">
+            <router-link :to="{name:'crews'}">
+              <button type="button" class="btn btn-light">Back</button>
+            </router-link>
+          </div>
+
+          <div class="mt-2">
+            Creating Crew
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <form method="post" @submit.prevent="crewCreate" @keydown="errors.clear($event.target.name)">
+            <div class="mb-3">
+              <label for="input_first_name" class="form-label">First Name</label>
+              <input type="text" name="first_name" v-model="crew.first_name" class="form-control" id="input_first_name">
+  
+              <span class="text-danger" v-if="errors.has('first_name')" v-text="errors.get('first_name')"></span>
+            </div>
+            <div class="mb-3">
+              <label for="input_last_name" class="form-label">Last Name</label>
+              <input type="text" name="last_name" v-model="crew.last_name" class="form-control" id="input_last_name">
+  
+              <span class="text-danger" v-text="errors.get('last_name')"></span>
+            </div>
+            <div class="mb-3">
+              <label for="input_middle_name" class="form-label">Middle Name</label>
+              <input type="text" name="middle_name" v-model="crew.middle_name" class="form-control" id="input_middle_name">
+  
+              <span class="text-danger" v-text="errors.get('middle_name')"></span>
+            </div>
+            <div class="mb-3">
+              <label for="input_email" class="form-label">Email Address</label>
+              <input type="email" name="email" v-model="crew.email" class="form-control" id="input_email">
+  
+              <span class="text-danger" v-text="errors.get('email')"></span>
+            </div>
+            <div class="mb-3">
+              <label for="input_address" class="form-label">Address</label>
+              <textarea name="address" class="form-control" id="input_address" v-model="crew.address" rows="3"></textarea>
+  
+              <span class="text-danger" v-text="errors.get('address')"></span>
+            </div>
+            <div class="mb-3">
+              <label for="input_education" class="form-label">Education</label>
+              <textarea name="education" class="form-control" id="input_education" v-model="crew.education" rows="3"></textarea>
+  
+              <span class="text-danger" v-text="errors.get('education')"></span>
+            </div>
+            <div class="mb-3">
+              <label for="input_contact" class="form-label">Contact</label>
+              <input type="text" name="contact" v-model="crew.contact" class="form-control" id="input_contact">
+  
+              <span class="text-danger" v-text="errors.get('contact')"></span>
+            </div>
+            <button type="submit" class="btn btn-primary mr-1">Create</button>
+  
+            <router-link :to="{name:'crews'}">
+              <button type="button" class="btn btn-light">Cancel</button>
+            </router-link>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import {mapGetters, mapActions, mapMutations} from 'vuex';
+import {CrewService} from "@/services/CrewService";
+import {AuthService} from "@/services/AuthService";
+import axios from "axios";
+import Errors from "@/core/Errors";
+
+export default {
+  name: "CrewCreate",
+  
+  data() {
+    return {
+      crew: {
+        first_name: null,
+        last_name: null,
+        middle_name: null,
+        email: null,
+        address: null,
+        education: null,
+        contact: null,
+      },
+      errors: new Errors(),
+    }
+  },
+  
+  methods: {
+    async crewCreate() {
+      await axios.post(`/crews/create`, this.crew)
+        .then(response => {
+          // alert(response);
+          console.log(response.data)
+          
+          this.$router.push({name: 'CrewIndex'});
+        })
+        .catch(error => this.errors.record(error.response.data.errors))
+    },
+  },
+  
+  computed: {
+
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

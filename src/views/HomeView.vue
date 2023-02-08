@@ -1,7 +1,11 @@
 <template>
   <div id="home">
       <img alt="Vue logo" src="../assets/logo.png" />
-      <HelloWorld msg="Welcome to Your Vue.js App" />
+    <HelloWorld msg="tags = props" test="some value here">
+      Some Text Inside HelloWorld Component
+      <template v-slot:named_slot1>Named Slot 1 content for the HelloWorld Component</template>
+      <template v-slot:named_slot2></template>
+    </HelloWorld>
   </div>
 </template>
 
